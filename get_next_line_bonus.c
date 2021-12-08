@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bregneau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/03 20:32:23 by bregneau          #+#    #+#             */
-/*   Updated: 2021/12/08 15:29:44 by bregneau         ###   ########.fr       */
+/*   Created: 2021/12/08 14:21:13 by bregneau          #+#    #+#             */
+/*   Updated: 2021/12/08 15:26:48 by bregneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_add_to_str(char *s1, char *s2, size_t s2_size)
 {
@@ -82,22 +82,24 @@ char	*ft_extract_line(char **memory, char *endline)
 
 char	*get_next_line(int fd)
 {
-	static char	*memory;
+	static char	*memory[1024];
 	char		*line;
 	char		*endline;
 
-	endline = ft_read_file(fd, &memory);
+	if (fd < 0 || fd > 1024)
+		return (NULL);
+	endline = ft_read_file(fd, memory + fd);
 	line = NULL;
 	if (endline)
 	{
-		return (ft_extract_line(&memory, endline));
+		return (ft_extract_line(memory + fd, endline));
 	}
-	if (memory)
+	if (memory[fd])
 	{
-		if (*memory)
-			line = ft_strndup(memory, ft_strlen(memory));
-		free(memory);
-		memory = NULL;
+		if (*(memory[fd]))
+			line = ft_strndup(memory[fd], ft_strlen(memory[fd]));
+		free(memory[fd]);
+		memory[fd] = NULL;
 		return (line);
 	}
 	return (NULL);
