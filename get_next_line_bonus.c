@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bregneau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bregneau <bregneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 14:21:13 by bregneau          #+#    #+#             */
-/*   Updated: 2021/12/08 15:26:48 by bregneau         ###   ########.fr       */
+/*   Updated: 2022/02/24 18:55:59 by bregneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ char	*ft_add_to_str(char *s1, char *s2, size_t s2_size)
 {
 	size_t	s1_size;
 	char	*str;
-	size_t	i;
 
 	s1_size = 0;
 	if (s1)
@@ -26,7 +25,6 @@ char	*ft_add_to_str(char *s1, char *s2, size_t s2_size)
 		str = malloc((s1_size + s2_size + 1) * sizeof(char));
 		if (!str)
 			return (NULL);
-		i = 0;
 		ft_strcpy(str, s1);
 		ft_strcpy(str + s1_size, s2);
 		str[s1_size + s2_size] = '\0';
