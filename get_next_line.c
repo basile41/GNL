@@ -6,7 +6,7 @@
 /*   By: bregneau <bregneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 20:32:23 by bregneau          #+#    #+#             */
-/*   Updated: 2022/02/24 18:56:10 by bregneau         ###   ########.fr       */
+/*   Updated: 2022/09/07 15:13:19 by bregneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,16 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*endline;
 
+	if (fd == -1)
+	{
+		free(memory);
+		memory = NULL;
+		return (NULL);
+	}
 	endline = ft_read_file(fd, &memory);
 	line = NULL;
 	if (endline)
-	{
 		return (ft_extract_line(&memory, endline));
-	}
 	if (memory)
 	{
 		if (*memory)
