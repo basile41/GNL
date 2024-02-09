@@ -6,7 +6,7 @@
 /*   By: bregneau <bregneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 20:32:23 by bregneau          #+#    #+#             */
-/*   Updated: 2022/09/07 15:13:19 by bregneau         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:02:05 by bregneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ char	*ft_add_to_str(char *s1, char *s2, size_t s2_size)
 		str = malloc((s1_size + s2_size + 1) * sizeof(char));
 		if (!str)
 			return (NULL);
-		ft_strcpy(str, s1);
-		ft_strcpy(str + s1_size, s2);
+		ft_strncpy(str, s1, s1_size);
+		ft_strncpy(str + s1_size, s2, s2_size);
 		str[s1_size + s2_size] = '\0';
 		if (s1)
 			free(s1);
@@ -35,72 +35,41 @@ char	*ft_add_to_str(char *s1, char *s2, size_t s2_size)
 	return (s1);
 }
 
-char	*ft_read_file(int fd, char **memory)
+int	ft_is_endline(char buf[], char **line)
 {
-	char	buffer[BUFFER_SIZE + 1];
-	ssize_t	ret;
-	char	*endline;
+	char	*ptr;
 
-	endline = NULL;
-	ret = 1;
-	while (ret > 0)
+	ptr = ft_strchr(buf, '\n');
+	if (ptr)
 	{
-		if (*memory)
-		{
-			endline = ft_strchr(*memory, '\n');
-			if (endline)
-				break ;
-		}
-		ret = read(fd, buffer, BUFFER_SIZE);
-		if (ret > 0)
-		{
-			buffer[ret] = 0;
-			*memory = ft_add_to_str(*memory, buffer, ret);
-		}
+		*line = ft_add_to_str(*line, buf, ptr - buf + 1);
+		ft_strncpy(buf, ptr + 1, BUFFER_SIZE);
+		return (1);
 	}
-	return (endline);
-}
-
-char	*ft_extract_line(char **memory, char *endline)
-{
-	char	*tmp;
-	char	*line;
-
-	line = ft_strndup(*memory, endline + 1 - *memory);
-	if (!line)
-		return (NULL);
-	tmp = ft_strndup(endline + 1, BUFFER_SIZE);
-	free(*memory);
-	*memory = ft_strndup(tmp, BUFFER_SIZE);
-	free(tmp);
-	if (!(*memory))
-		return (NULL);
-	return (line);
+	*line = ft_add_to_str(*line, buf, ft_strlen(buf));
+	buf[0] = '\0';
+	return (0);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*memory;
+	static char	buf[BUFFER_SIZE + 1];
 	char		*line;
-	char		*endline;
+	int			ret;
 
-	if (fd == -1)
-	{
-		free(memory);
-		memory = NULL;
-		return (NULL);
-	}
-	endline = ft_read_file(fd, &memory);
 	line = NULL;
-	if (endline)
-		return (ft_extract_line(&memory, endline));
-	if (memory)
+	while (ft_is_endline(buf, &line) == 0)
 	{
-		if (*memory)
-			line = ft_strndup(memory, ft_strlen(memory));
-		free(memory);
-		memory = NULL;
-		return (line);
+		ret = read(fd, buf, BUFFER_SIZE);
+		if (ret < 0)
+		{
+			buf[0] = '\0';
+			free(line);
+			return (NULL);
+		}
+		if (ret == 0)
+			return (line);
+		buf[ret] = '\0';
 	}
-	return (NULL);
+	return (line);
 }

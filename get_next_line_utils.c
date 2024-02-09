@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bregneau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bregneau <bregneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 02:48:27 by bregneau          #+#    #+#             */
-/*   Updated: 2021/12/07 13:57:51 by bregneau         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:02:20 by bregneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,12 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strcpy(char *dst, const char *src)
+char	*ft_strncpy(char *dst, const char *src, size_t n)
 {
 	size_t	i;
 
 	i = 0;
-	if (!src)
-		return (dst);
-	while (src[i])
+	while (src && src[i] && i < n)
 	{
 		dst[i] = src[i];
 		i++;
