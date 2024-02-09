@@ -6,7 +6,7 @@
 /*   By: bregneau <bregneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 20:46:06 by bregneau          #+#    #+#             */
-/*   Updated: 2024/02/09 14:22:40 by bregneau         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:43:12 by bregneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdio.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 100000000
+#  define BUFFER_SIZE 10000
 # endif
 
 char	*get_next_line(int fd);
